@@ -16,8 +16,7 @@ function Login() {
     e.preventDefault();
     attemptLogin(currLogin.email, currLogin.password)
     .then((response) => {
-        console.log(response.data)
-        if(response.data['status'] === 'Successfully Logged in (valid user and pass)'){
+        if(response.data['code'] === 'true'){
             setLoginState(true);
             navigate('/projects')
         }

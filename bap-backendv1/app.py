@@ -13,7 +13,7 @@ client = MongoClient(uri)
 db = client["BAP-MAIN"]
 
 @app.route('/')
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET'])
 def login():
 
     user = request.args.get('user')
@@ -25,12 +25,14 @@ def login():
             if foundUser and foundUser['password'] == password:
                 print('success')
                 return jsonify({
-                    "status": 'Successfully Logged in (valid user and pass)'
+                    "status": 'Successfully Logged in (valid user and pass)',
+                    'code':'true'
                 })
             else:
                 print('failure')
                 return jsonify({
-                    "status":"Failed to login (username not found or pass incorrect)"
+                    "status":"Failed to login (username not found or pass incorrect)",
+                    'code':'false'
                 })
         # elif request.method == 'POST':
         #     db['UserAuth'].insert_one({
@@ -42,9 +44,41 @@ def login():
         #     })
     else:
         return jsonify({
-            'status': 'Didnt fill in either user or pass'
+            'status': 'Didnt fill in either user or pass',
+            'code':'false'
         })
         
+
+@app.route('/signup/', methods=['POST'])
+def signup():
+    user = request.args.get('user')
+    password = request.args.get('pw')
+
+    if(user and password):
+        if request.method == 'POST':
+
+            alreadyExists = True if db['UserAuth'].find_one({'username':user}) else False
+
+            if(not alreadyExists):
+                db['UserAuth'].insert_one({
+                'username':user,
+                'password':password
+                })
+                return jsonify({
+                    'status':'Successfully created an account',
+                    'code':'true'
+                })
+            else:
+                return jsonify({
+                    'status':'Account already exists',
+                    'code':'false2'
+                })
+    else:
+        return jsonify({
+            'status': 'Didnt fill in either user or pass',
+            'code':'false'
+        })
+
 
 
 if __name__ == '__main__':
