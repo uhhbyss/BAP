@@ -44,10 +44,13 @@ const sampleProjects = [
 
 const router = createBrowserRouter([
 {
-  path: "/",
+  path: '/',
   element: <Login />,
 },
-
+{
+  path: '/login',
+  element: <Login />,
+},
 {
   path: "/signup",
   element: <Signup />

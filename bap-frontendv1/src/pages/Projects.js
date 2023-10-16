@@ -1,6 +1,6 @@
 // Import React and React-DOM libraries
 import React from 'react';
-import Project from '../Project';
+import Project from '../components/Project'
 import {
   Box,
 } from '@mui/material'

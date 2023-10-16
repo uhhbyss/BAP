@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { TextField, Button, Box, Typography, Stack} from "@mui/material";
-import { FaFacebookF, FaGoogle, FaApple } from "react-icons/fa";
 
 function Signup() {
   const [email, setEmail] = useState("");
