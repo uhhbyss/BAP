@@ -14,8 +14,17 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    attemptLogin(currLogin.email, currLogin.password, setLoginState)
-    navigate('/projects')
+    attemptLogin(currLogin.email, currLogin.password)
+    .then((response) => {
+        console.log(response.data)
+        if(response.data['status'] === 'Successfully Logged in (valid user and pass)'){
+            setLoginState(true);
+            navigate('/projects')
+        }
+        else{
+            setLoginState(false)
+        }
+    })
   }
 
 
