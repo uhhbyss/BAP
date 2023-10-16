@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { TextField, Button, Box, Typography, Stack} from "@mui/material";
 import attemptLogin from './../services/LoginService'
 
@@ -8,13 +8,14 @@ function Login() {
     'email': '',
     'password': ''
   })
-
   const [loginState, setLoginState] = useState(false)
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: implement login logic
     attemptLogin(currLogin.email, currLogin.password, setLoginState)
+    navigate('/projects')
   }
 
 
@@ -28,10 +29,6 @@ function Login() {
             </Box>
             <Box className="login__form">
                 <Typography variant="h1">Log in</Typography>
-                {
-                    loginState && 
-                    <Typography> LOGIN SUCCEEDED </Typography> 
-                }
                 <form onSubmit={handleSubmit}>
                 <Stack direction={'column'}>
                     <TextField
