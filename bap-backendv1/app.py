@@ -6,12 +6,11 @@ import os
 from config import config
 
 app = Flask(__name__)
+CORS(app)
 
 uri = config["MONGO_URI"]
 client = MongoClient(uri)
 db = client["BAP-MAIN"]
-
-CORS(app)
 
 @app.route('/')
 @app.route('/login/', methods=['GET', 'POST'])
@@ -24,10 +23,12 @@ def login():
         if request.method == 'GET':
             foundUser = db['UserAuth'].find_one({'username':user})
             if foundUser and foundUser['password'] == password:
+                print('success')
                 return jsonify({
                     "status": 'Successfully Logged in (valid user and pass)'
                 })
             else:
+                print('failure')
                 return jsonify({
                     "status":"Failed to login (username not found or pass incorrect)"
                 })
@@ -44,19 +45,6 @@ def login():
             'status': 'Didnt fill in either user or pass'
         })
         
-            
-        
-
-        
-    
-    
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
