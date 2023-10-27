@@ -10,8 +10,7 @@ import cipher
 app = Flask(__name__)
 CORS(app)
 
-# uri = config["MONGO_URI"]
-uri = 'mongodb+srv://bisaamh:bisaamhassan@bap-hrd.wlvquy6.mongodb.net/'
+uri = config["MONGO_URI"]
 client = MongoClient(uri)
 db = client["BAP-MAIN"]
 
