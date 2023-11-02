@@ -9,6 +9,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import ProjectCreation from './pages/ProjectCreation';
 
 // Define some sample data for testing
 const sampleProjects = [
@@ -62,6 +63,11 @@ const router = createBrowserRouter([
   element: <Projects projects = {sampleProjects}/>
 
 },
+
+{
+  path: "/projectcreation",
+  element: <ProjectCreation />
+}
 
 ]);
 
