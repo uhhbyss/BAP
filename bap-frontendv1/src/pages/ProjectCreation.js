@@ -4,9 +4,21 @@ import { TextField, Button, Box, Typography, Stack} from "@mui/material";
 import attemptProjectCreation from '../services/ProjectCreationService'
 import { useContext } from "react";
 import { UserContext } from "../contexts/userContext";
+import { useEffect } from "react";
 
 function ProjectCreation() {
     const { user, updateState } = useContext(UserContext)
+    // console.log(user)
+
+    useEffect(() => {
+      const loggedInUser = localStorage.getItem('user');
+      if (loggedInUser) {
+        const foundUser = JSON.parse(loggedInUser);
+        updateState(foundUser);
+      }
+    }, []);
+
+
     const [currProjectCreate, setCurrProjectCreate] = useState({
       'project_name': '',
       'id': '',
@@ -23,17 +35,25 @@ function ProjectCreation() {
         .then((response) => {
             console.log(response.data)
             if(response.data['code'] === 'true'){
+              const updatedUser = {}
+              Object.assign(updatedUser, user)
+              console.log(updatedUser)
+              console.log(response.data["returnProject"])
+              updatedUser.projects.push(response.data["returnProject"])
+
+              updateState(updatedUser)
+              localStorage.setItem('user', JSON.stringify({user: updatedUser}))
               alert(response.data['status'])
-              setProjectCreateState(true);
+              // setProjectCreateState(true);
               navigate('/projects')
             }
             else if(response.data['code'] === 'false1'){
               alert(response.data['status'])
-              setProjectCreateState(false)
+              // setProjectCreateState(false)
             }
             else{
               alert(response.data['status'])
-              setProjectCreateState(false)
+              // setProjectCreateState(false)
             }
         })
     

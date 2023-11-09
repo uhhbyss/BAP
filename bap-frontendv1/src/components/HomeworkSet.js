@@ -16,7 +16,7 @@ import { UserContext } from '../contexts/userContext';
 
 
 function HomeworkSet( { name, capacity, availability, checkedOut } ) {
-    const { user, updateState } = useContext(UserContext)
+    const { user } = useContext(UserContext)
     const [currentQuantity, setCurrentQuantity] = useState(checkedOut);
     const [inputNumber, setInputNumber] = useState(0); //string -> need to parseInt
     

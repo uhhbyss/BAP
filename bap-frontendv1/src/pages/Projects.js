@@ -3,6 +3,8 @@ import React from 'react';
 import Project from '../components/Project'
 import {
   Box,
+  List,
+  Paper
 } from '@mui/material'
 import attemptProjects from '../services/ProjectsService';
 import { useEffect, useState } from 'react';
@@ -12,9 +14,18 @@ import { UserContext } from '../contexts/userContext';
 
 
 // Define a Projects component that displays a list of projects
-function Projects(props) {
-
+function Projects() {
   const { user, updateState } = useContext(UserContext)
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      updateState(foundUser);
+    }
+  }, []);
+
+
+
   //if username exists in the user object, then set it to that string, else return Error 
   //messy, will fix after we verify that the api works consistently
   console.log(user)
@@ -51,13 +62,15 @@ function Projects(props) {
   // Return the JSX element for the projects component
   return (
     <div className="projects">
-      {/* before code: */}
-      {/* {projects.map(project => ( */}
-      {
-      user_projects?.map(project => (
-        // Use the Project component to render each project
-        <Project name={project.name} users={project.users} hwsets={project.hwsets} description={project.description}/>
-      ))}
+      <Paper style = {{maxHeight: '60vh', overflow: 'auto'}}>
+        <List>
+        {
+          user_projects?.map(project => (
+            // Use the Project component to render each project
+            <Project name={project.name} users={project.users} hwsets={project.hwsets} description={project.description}/>
+          ))}
+        </List>
+      </Paper>
     </div>
   );
 }

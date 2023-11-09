@@ -23,9 +23,8 @@ projects = list of project ids
 
 '''
 
-    
-def findProjects(projectIDList):
-    # these are hardcoded for rn but we need to shift to something that could DYNAMICALLY read from the HWSets document in the database
+
+def creatProjectForGlobalUser(id):
     db_HWSet1 = db['HWSets'].find_one({'name' : "HWSet1"})
     hw1avail = db_HWSet1['availability']
     hw1capa = db_HWSet1['capacity']
@@ -35,17 +34,14 @@ def findProjects(projectIDList):
     hw2capa = db_HWSet2['capacity']
 
 
-    projects = []
-    for id in projectIDList:
-        db_project = db['Projects'].find_one({'id' : id})
-        proj_name = db_project['name']
-        hw1checked = db_project['checkedOut'][0]
-        hw2checked = db_project['checkedOut'][1]
-        usersWithAccess = db_project['users']
-        description = db_project['description']
-        
-        projects.append({
-            'name' : proj_name,
+    db_project = db['Projects'].find_one({'id' : id})
+    proj_name = db_project['name']
+    hw1checked = db_project['checkedOut'][0]
+    hw2checked = db_project['checkedOut'][1]
+    usersWithAccess = db_project['users']
+    description = db_project['description']
+
+    return {'name' : proj_name,
             # might not need id as an attribute
             'id' : id,
             'users' : usersWithAccess,
@@ -64,7 +60,31 @@ def findProjects(projectIDList):
                     'checkedOut' : hw2checked 
                 }
             ]
-        })
+        }
+
+
+
+def findProjects(projectIDList):
+    # these are hardcoded for rn but we need to shift to something that could DYNAMICALLY read from the HWSets document in the database
+    # db_HWSet1 = db['HWSets'].find_one({'name' : "HWSet1"})
+    # hw1avail = db_HWSet1['availability']
+    # hw1capa = db_HWSet1['capacity']
+
+    # db_HWSet2 = db['HWSets'].find_one({'name' : "HWSet2"})
+    # hw2avail = db_HWSet2['availability']
+    # hw2capa = db_HWSet2['capacity']
+
+
+    projects = []
+    for id in projectIDList:
+        db_project = db['Projects'].find_one({'id' : id})
+        proj_name = db_project['name']
+        hw1checked = db_project['checkedOut'][0]
+        hw2checked = db_project['checkedOut'][1]
+        usersWithAccess = db_project['users']
+        description = db_project['description']
+        
+        projects.append(creatProjectForGlobalUser(id))
     return projects
 
 def getUserMetadata(user):
@@ -212,6 +232,7 @@ def projectcreation():
     id = request.args.get('id')
     description = request.args.get('description')
     currUser = request.args.get('currUser')
+    accessUser = cipher.encrypt(currUser, 8, 1)
 
     if name and id and description:
         if request.method == "POST":
@@ -219,18 +240,21 @@ def projectcreation():
             alreadyExists = True if db['Projects'].find_one({'username': name}) or db['Projects'].find_one({'id':id}) else False
 
             if not alreadyExists:
-                db['Projects'].insert_one(
-                    {
+                db['Projects'].insert_one({
                         'name' : name, 
                         'id' : id, 
                         'description': description,
                         'checkedOut' : [0, 0],
                         'users' : [currUser]
-                    }
-                )
+                    })
+                db['UserMetadata'].update_one({'username':accessUser}, {'$push':{'projects': id}})
+                
+                returnForUser = creatProjectForGlobalUser(id)
+                # what needs to be stored in the user global state (below) is different from what is stored in the database (above)
                 return jsonify({
                     'status': 'Sucessfully created a new project',
-                    'code' : 'true'
+                    'code' : 'true',
+                    'returnProject' : returnForUser
                 })
             else: 
                 return jsonify({

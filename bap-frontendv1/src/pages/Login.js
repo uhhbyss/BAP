@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate} from "react-router-dom";
 import { TextField, Button, Box, Typography, Stack} from "@mui/material";
 import attemptLogin from './../services/LoginService'
@@ -10,21 +10,24 @@ function Login() {
     'email': '',
     'password': ''
   })
-  const [loginState, setLoginState] = useState(false)
+//   const [loginState, setLoginState] = useState(false)
   const { user, updateState } = useContext(UserContext)
   const navigate = useNavigate();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     attemptLogin(currLogin.email, currLogin.password)
     .then((response) => {
         if(response.data['code'] === 'true'){
-            setLoginState(true);
+            // setLoginState(true);
             updateState({ user: {username: currLogin.email, projects: response.data['projects']}})
+            const ans = JSON.stringify({ user: {username: currLogin.email, projects: response.data['projects']}})
+            localStorage.setItem('user', ans)
             navigate('/projects')
         }
         else{
-            setLoginState(false)
+            // setLoginState(false)
         }
     })
   }
