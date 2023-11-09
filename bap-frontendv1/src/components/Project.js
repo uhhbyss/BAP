@@ -64,6 +64,7 @@ function Project(props) {
             </div>
           </Box>
 
+
           <Box sx={{p: '1rem'}}>
             <Button className="join-button" variant="contained" color='success' onClick={handleJoin} projName={name} sx={{}}>
               Join

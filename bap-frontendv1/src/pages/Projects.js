@@ -70,6 +70,10 @@ function Projects() {
     })
   }
 
+  function handleCreateProject(){
+    navigate('/projectcreation')
+  }
+
 
   function logout(){
     localStorage.clear()
@@ -126,29 +130,33 @@ function Projects() {
           </List>
         </Paper>
       </div>
-      <Stack direction='row' sx ={{display: 'flex', justifyContent: 'center'}}>
-        <Box sx={{display:'flex', justifyContent:'space-between', width: '30em'}}>
-          <Button onClick={logout} variant="contained" color='error'>
-                  LOGOUT
-          </Button>
-
-          <Box>
-            <TextField
-              type="email"
-              label=""
-              placeholder='Joining a project? Paste the ID here!'
-              value={currProjectIDInput}
-              onChange={(e) => setCurrProjectIDInput(e.target.value)}
-              sx={{width: '20rem'}}
-            />
-            <Button onClick={handleJoin} variant="outlined">
-              JOIN
+      <Stack direction={'column'} sx={{display:'flex', justifyContent:'center'}}>
+        <Stack direction='row' sx ={{display: 'flex', justifyContent: 'center'}}>
+          <Box sx={{display:'flex', justifyContent:'space-between', width: '35em'}}>
+            <Button onClick={logout} variant="contained" color='error' sx={{m:1}}>
+                    LOGOUT
             </Button>
+
+            <Box sx={{m:1}}>
+              <TextField
+                type="email"
+                label=""
+                placeholder='Joining a project? Paste the ID here!'
+                value={currProjectIDInput}
+                onChange={(e) => setCurrProjectIDInput(e.target.value)}
+                sx={{width: '20rem'}}
+              />
+              <Button onClick={handleJoin} variant="contained" sx={{m:1}}>
+                JOIN
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        </Stack>
+        <Button variant='outlined' color='info' onClick={handleCreateProject} sx={{p:2}}>
+            Create Project
+          </Button>
       </Stack>
       
-
     </div>
     
     
