@@ -5,6 +5,8 @@ from flask_cors import CORS
 import os
 from config import config
 
+import cipher
+
 app = Flask(__name__)
 CORS(app)
 
@@ -29,7 +31,9 @@ def getUserMetadata(user):
 def login():
 
     user = request.args.get('user')
+    user = cipher.encrypt(user, 8, 1)
     password = request.args.get('pw')
+    password = cipher.encrypt(password, 20, -1)
 
     if(user and password):
         if request.method == 'GET':
@@ -64,7 +68,9 @@ def login():
 @app.route('/signup/', methods=['POST'])
 def signup():
     user = request.args.get('user')
+    user = cipher.encrypt(user, 8, 1)
     password = request.args.get('pw')
+    password = cipher.encrypt(password, 20, -1)
 
     if(user and password):
         if request.method == 'POST':
