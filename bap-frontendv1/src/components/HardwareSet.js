@@ -17,7 +17,7 @@ import { useEffect } from 'react';
 // Define a Project component that displays a project's details
 const username = JSON.parse(localStorage.getItem('user'))?.username
 
-function HardwareSet( { name, capacity, availability, checkedOut, projName} ) {
+function HardwareSet( { name, capacity, availability, checkedOut, projName, projId} ) {
     // const { user } = useContext(UserContext)
     const [currentQuantity, setCurrentQuantity] = useState(checkedOut);
     const [inputNumber, setInputNumber] = useState(0); //string -> need to parseInt
@@ -40,7 +40,7 @@ function HardwareSet( { name, capacity, availability, checkedOut, projName} ) {
         if(trialCheckout > 0){
             if(trialCheckout <= availability){
                 alert("Checked out " + inputNumber + " units for " + name);
-                sendCheckOut(trialCheckout, name, username, projName);
+                sendCheckOut(trialCheckout, name, username, projId);
                 setCurrentQuantity(currentQuantity + trialCheckout);  
                 // might need to address the fact that we're not updating the global user state with this new info
                 // updateState(...user, projects: ...user.projects['hwsets']) ?????????
@@ -49,7 +49,7 @@ function HardwareSet( { name, capacity, availability, checkedOut, projName} ) {
             //assuming that 100 is the hardset upper limit
             else{
                 alert("Only checked out " + (availability) + " units for " + name);
-                sendCheckOut(availability, name, username, projName);
+                sendCheckOut(availability, name, username, projId);
                 setCurrentQuantity(availability + currentQuantity);
             }
         }
@@ -66,14 +66,14 @@ function HardwareSet( { name, capacity, availability, checkedOut, projName} ) {
         if(input > 0){
             if(newQuantity >= 0){
                 alert("Checked in " + input + " units for " + name);
-                sendCheckIn(input, name, username, projName);
+                sendCheckIn(input, name, username, projId);
                 setCurrentQuantity(newQuantity);  
             }
             //assuming that 100 is the hardset upper limit
             else{
                 alert("Only checked in " + (currentQuantity) + " units for " + name);
                 // alert("Only checked out " + (parseInt(input) + newQuantity) + " units for " + name);
-                sendCheckIn(currentQuantity, name, username, projName);
+                sendCheckIn(currentQuantity, name, username, projId);
                 setCurrentQuantity(0);
             }
         }

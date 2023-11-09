@@ -209,7 +209,7 @@ def projects():
         if typeReq == "checkIn":
             input = int(request.args.get("amount"))
             hwset = request.args.get("hwset")
-            projName = request.args.get('projName')
+            projId = request.args.get('project')
 
             currentAvailable = db['HWSets'].find_one({'name' : hwset})['availability']
             newAvailable = currentAvailable + input
@@ -217,7 +217,11 @@ def projects():
             index = 0 if hwset=='HWSet1' else 1
 
             db['HWSets'].update_one({'name' : hwset}, { "$set" : {'availability': newAvailable } })
-            db['Projects'].update_one({'name': projName}, {'$inc' : {'checkedout.' + str(index) : -1 * input}})
+            # db['Projects'].update_one({'id': projId}, {'$inc' : {'checkedout.' + str(index) : -1 * input}})
+            currList = db['Projects'].find_one({'id':projId})['checkedOut']
+            currList[index] -= input
+            db['Projects'].update_one({'id' : projId}, { "$set" : {'checkedOut': currList } })
+
 
             return jsonify({
                     'status' : "Successfully checked IN",
@@ -227,7 +231,7 @@ def projects():
         elif typeReq == "checkOut":
             input = int(request.args.get("amount"))
             hwset = request.args.get("hwset")
-            projName = request.args.get('projName')
+            projId = request.args.get('project')
 
             currentAvailable = db['HWSets'].find_one({'name' : hwset})['availability']
             newAvailable = currentAvailable - input
@@ -236,8 +240,10 @@ def projects():
 
             db['HWSets'].update_one({'name' : hwset}, { "$set" : {'availability': newAvailable } })
             # this needs to be changed when dynamic hwset are added -> from checkedout.0 to checkedout.$ to account for changing hwset indexes
-            db['Projects'].update_one({'name': projName}, {'$inc' : {'checkedout.0': input}})
-
+            # result = db['Projects'].update_one({'name': projName}, {'$inc' : {'checkedout.0.value': input}})
+            currList = db['Projects'].find_one({'id':projId})['checkedOut']
+            currList[index] += input
+            db['Projects'].update_one({'id' : projId}, { "$set" : {'checkedOut': currList } })
 
             return jsonify({
                     'status' : "Successfully checked OUT",

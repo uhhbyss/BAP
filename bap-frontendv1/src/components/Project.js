@@ -70,7 +70,7 @@ function Project(props) {
           <Box sx={{p: '1rem'}}>
             <div className="project-hwsets">
               {hwsets.map(hwset => (
-                <HardwareSet name={hwset.name} capacity={hwset.capacity} availability={hwset.availability} checkedOut={hwset.checkedOut}/>
+                <HardwareSet name={hwset.name} capacity={hwset.capacity} availability={hwset.availability} checkedOut={hwset.checkedOut} projId={id}/>
               ))}
             </div>
           </Box>
