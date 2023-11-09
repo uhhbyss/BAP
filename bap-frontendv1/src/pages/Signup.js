@@ -25,7 +25,7 @@ function Signup() {
           console.log(response.data)
           if(response.data['code'] === 'true'){
             setSignUpState(true);
-            navigate('/projects')
+            navigate('/projects', {user_name : currSignup.email})
           }
           else if(response.data['code'] === 'false2'){
             alert('Account already exists!')

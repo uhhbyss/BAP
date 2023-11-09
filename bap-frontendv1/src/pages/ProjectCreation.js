@@ -3,11 +3,13 @@ import { Link, useNavigate} from "react-router-dom";
 import { TextField, Button, Box, Typography, Stack} from "@mui/material";
 import attemptProjectCreation from '../services/ProjectCreationService'
 
-function ProjectCreation() {
+function ProjectCreation(props) {
+    const {username} = props;
+
     const [currProjectCreate, setCurrProjectCreate] = useState({
       'project_name': '',
-      'default_checkout_HW1': '',
-      'default_checkout_HW2': ''
+      'id': '',
+      'description': ''
     })
     const [ProjectCreateState, setProjectCreateState] = useState()
   
@@ -16,29 +18,24 @@ function ProjectCreation() {
     const handleSubmit = (e) => {
       e.preventDefault();
 
-      // Just copied from the Signup.js since I'm not sure how to 
-      //  set it up for this case
-
-    //   if(currSignup.password != currSignup.confirmedPassword){
-    //     alert("Passwords don't match");
-    //   }
-    //   else{
-    //     attemptSignup(currSignup.email, currSignup.password)
-    //     .then((response) => {
-    //         console.log(response.data)
-    //         if(response.data['code'] === 'true'){
-    //           setSignUpState(true);
-    //           navigate('/projects')
-    //         }
-    //         else if(response.data['code'] === 'false2'){
-    //           alert('Account already exists!')
-    //           setSignUpState(false)
-    //         }
-    //         else{
-    //           setSignUpState(false)
-    //         }
-    //     })
-    //   }
+        attemptProjectCreation(currProjectCreate.project_name, currProjectCreate.id, currProjectCreate.description)
+        .then((response) => {
+            console.log(response.data)
+            if(response.data['code'] === 'true'){
+              alert(response.data['status'])
+              setProjectCreateState(true);
+              navigate('/projects', {user_name : this.props.username})
+            }
+            else if(response.data['code'] === 'false1'){
+              alert(response.data['status'])
+              setProjectCreateState(false)
+            }
+            else{
+              alert(response.data['status'])
+              setProjectCreateState(false)
+            }
+        })
+    
     };
   
     return (
@@ -62,17 +59,17 @@ function ProjectCreation() {
                 required
               />
               <TextField
-                type="default_checkout_HW1"
-                label="Enter the amount you wish to immediately check out from HW Set 1"
-                value={currProjectCreate.default_checkout_HW1}
-                onChange={(e) => setCurrProjectCreate({...currProjectCreate, default_checkout_HW1: e.target.value})}
+                type="id"
+                label="Enter the id for the project (This will be used by other users to search and join this project)"
+                value={currProjectCreate.id}
+                onChange={(e) => setCurrProjectCreate({...currProjectCreate, id: e.target.value})}
                 required
               />
               <TextField
-                type="default_checkout_HW2"
-                label="Enter the amount you wish to immediately check out from HW Set 1"
-                value={currProjectCreate.default_checkout_HW2}
-                onChange={(e) => setCurrProjectCreate({...currProjectCreate, default_checkout_HW2: e.target.value})}
+                type="description"
+                label="Enter the description for this project"
+                value={currProjectCreate.description}
+                onChange={(e) => setCurrProjectCreate({...currProjectCreate, description: e.target.value})}
                 required
               />
               <Box display={'flex'}>

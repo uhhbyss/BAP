@@ -18,7 +18,9 @@ function Login() {
     .then((response) => {
         if(response.data['code'] === 'true'){
             setLoginState(true);
-            navigate('/projects')
+            var temp = currLogin.email;
+            // console.log(temp)
+            navigate('/projects', {user_name : temp})
         }
         else{
             setLoginState(false)
