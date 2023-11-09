@@ -1,4 +1,4 @@
-import HomeworkSet from './HomeworkSet.js'
+import HardwareSet from './HardwareSet.js'
 import React, { useState } from 'react';
 import {
   Stack, 
@@ -59,13 +59,13 @@ function Project(props) {
           <Box sx={{p: '1rem'}}>
             <div className="project-hwsets">
               {hwsets.map(hwset => (
-                <HomeworkSet name={hwset.name} capacity={hwset.capacity} availability={hwset.availability} checkedOut={hwset.checkedOut}/>
+                <HardwareSet name={hwset.name} capacity={hwset.capacity} availability={hwset.availability} checkedOut={hwset.checkedOut}/>
               ))}
             </div>
           </Box>
 
           <Box sx={{p: '1rem'}}>
-            <Button className="join-button" variant="contained" color='success' onClick={handleJoin} sx={{}}>
+            <Button className="join-button" variant="contained" color='success' onClick={handleJoin} projName={name} sx={{}}>
               Join
             </Button>
           </Box>

@@ -25,6 +25,7 @@ function Signup() {
           console.log(response.data)
           if(response.data['code'] === 'true'){
             setSignUpState(true);
+            localStorage.setItem('user', JSON.stringify({ username: currSignup.email}))
             navigate('/projects')
           }
           else if(response.data['code'] === 'false2'){

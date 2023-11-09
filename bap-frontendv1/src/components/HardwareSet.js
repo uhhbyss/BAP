@@ -7,18 +7,32 @@ import {
     Button,
     Box
 } from '@mui/material';
+import getAvailability from './../services/HardwareSetService'
 
 import { sendCheckIn, sendCheckOut } from './../services/ProjectsService'
 import { useContext } from 'react';
 import { UserContext } from '../contexts/userContext';
+import { useEffect } from 'react';
 
 // Define a Project component that displays a project's details
+const username = JSON.parse(localStorage.getItem('user'))?.username
 
-
-function HomeworkSet( { name, capacity, availability, checkedOut } ) {
-    const { user } = useContext(UserContext)
+function HardwareSet( { name, capacity, availability, checkedOut, projName} ) {
+    // const { user } = useContext(UserContext)
     const [currentQuantity, setCurrentQuantity] = useState(checkedOut);
     const [inputNumber, setInputNumber] = useState(0); //string -> need to parseInt
+
+    useEffect(() => {
+        getAvailability(name, username)
+        .then((response) => {
+            if(response.data['code'] === 'true'){
+                availability = response.data['availability']
+            }
+            else{
+                alert('error getting availability!!')
+            }
+        })
+      }, [currentQuantity]);
     
 
     function checkOut(){
@@ -26,7 +40,7 @@ function HomeworkSet( { name, capacity, availability, checkedOut } ) {
         if(trialCheckout > 0){
             if(trialCheckout <= availability){
                 alert("Checked out " + inputNumber + " units for " + name);
-                sendCheckOut(trialCheckout, name, user.username);
+                sendCheckOut(trialCheckout, name, username, projName);
                 setCurrentQuantity(currentQuantity + trialCheckout);  
                 // might need to address the fact that we're not updating the global user state with this new info
                 // updateState(...user, projects: ...user.projects['hwsets']) ?????????
@@ -35,7 +49,7 @@ function HomeworkSet( { name, capacity, availability, checkedOut } ) {
             //assuming that 100 is the hardset upper limit
             else{
                 alert("Only checked out " + (availability) + " units for " + name);
-                sendCheckOut(availability, name, user.username);
+                sendCheckOut(availability, name, username, projName);
                 setCurrentQuantity(availability + currentQuantity);
             }
         }
@@ -52,14 +66,14 @@ function HomeworkSet( { name, capacity, availability, checkedOut } ) {
         if(input > 0){
             if(newQuantity >= 0){
                 alert("Checked in " + input + " units for " + name);
-                sendCheckIn(input, name, user.username);
+                sendCheckIn(input, name, username, projName);
                 setCurrentQuantity(newQuantity);  
             }
             //assuming that 100 is the hardset upper limit
             else{
                 alert("Only checked in " + (currentQuantity) + " units for " + name);
                 // alert("Only checked out " + (parseInt(input) + newQuantity) + " units for " + name);
-                sendCheckIn(currentQuantity, name, user.username);
+                sendCheckIn(currentQuantity, name, username, projName);
                 setCurrentQuantity(0);
             }
         }
@@ -87,7 +101,7 @@ function HomeworkSet( { name, capacity, availability, checkedOut } ) {
 };
 
 
-export default HomeworkSet;
+export default HardwareSet;
 
 
 

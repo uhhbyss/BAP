@@ -195,17 +195,29 @@ def projects():
                     'status' : "Username is empty!",
                     'code' : 'false'
                 })
+        elif typeReq == "getAvailability":
+            hwsetName = request.args.get('hwset')
+            availability = db['HWSets'].find_one({'name' : hwsetName})['availability']
+            return jsonify({
+                'status': 'succesfully retrieved availability',
+                'availability' : availability,
+                'code': 'true'
+            })
         # might want to change this because we are doing the computations on the frontend rather than the backend
     elif request.method == "POST":
         typeReq = request.args.get('typeReq')
         if typeReq == "checkIn":
             input = int(request.args.get("amount"))
             hwset = request.args.get("hwset")
+            projName = request.args.get('projName')
 
             currentAvailable = db['HWSets'].find_one({'name' : hwset})['availability']
             newAvailable = currentAvailable + input
 
+            index = 0 if hwset=='HWSet1' else 1
+
             db['HWSets'].update_one({'name' : hwset}, { "$set" : {'availability': newAvailable } })
+            db['Projects'].update_one({'name': projName}, {'$inc' : {'checkedout.' + str(index) : -1 * input}})
 
             return jsonify({
                     'status' : "Successfully checked IN",
@@ -215,16 +227,46 @@ def projects():
         elif typeReq == "checkOut":
             input = int(request.args.get("amount"))
             hwset = request.args.get("hwset")
+            projName = request.args.get('projName')
 
             currentAvailable = db['HWSets'].find_one({'name' : hwset})['availability']
             newAvailable = currentAvailable - input
 
+            index = 0 if hwset=='HWSet1' else 1
+
             db['HWSets'].update_one({'name' : hwset}, { "$set" : {'availability': newAvailable } })
-            
+            # this needs to be changed when dynamic hwset are added -> from checkedout.0 to checkedout.$ to account for changing hwset indexes
+            db['Projects'].update_one({'name': projName}, {'$inc' : {'checkedout.0': input}})
+
+
             return jsonify({
                     'status' : "Successfully checked OUT",
                     'code' : 'true'
                 })
+        
+        elif typeReq == "joinProj":
+            projectID = request.args.get("ID")
+            if db['Projects'].find_one({'id': projectID}):
+                if username not in db['Projects'].find_one({'id': projectID})['users']:
+                    db['Projects'].update_one({'id': projectID},{'$push':{'users': username}})
+                    db['UserMetadata'].update_one({'username' : user}, {'$push':{'projects': projectID}})
+                    return jsonify({
+                        'status' : 'Successfully added you to the project!',
+                        'code' : 'true'
+                    })
+                else: 
+                    return jsonify({
+                        'status' : 'User already exists in Project!',
+                        'code' : 'false'
+                    })
+            else:
+                return jsonify({
+                    'status' : 'ProjectID not found!',
+                    'code' : 'false'
+                })
+
+
+
 
 @app.route('/projectcreation/', methods=['POST'])
 def projectcreation():
