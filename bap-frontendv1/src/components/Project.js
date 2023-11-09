@@ -7,20 +7,31 @@ import {
   Typography
 } from '@mui/material';
 import {Text, StyleSheet} from 'react-native';
+import { leaveRequest } from '../services/ProjectsService.js';
+import { useNavigate } from 'react-router-dom';
 
 // Define a Project component that displays a project's details
 function Project(props) {
     // Use props to access the project's name, users, and hwsets
-    const { name, users, hwsets, description } = props;
+    const { name, users, hwsets, description, id} = props;
+    const username = JSON.parse(localStorage.getItem('user')).username
+    const navigate = useNavigate();
+
+
 
     // const { user, updateState } = useContext(UserContext)
 
 
     // NEED TO UPDATE THIS WITH THE HOMEWORK ANSWERS!!!!
     // Define a function to handle joining a project
-    function handleJoin() {
+    function handleLeave() {
       // TODO: Implement the logic to join a project
-      alert(`You joined ERROR`);
+      // alert(`You joined ERROR`);
+      leaveRequest(username, id)
+      .then((response) => {
+        alert(response.data['status'])
+        navigate('/projects')
+      })
     }
 
     const styles = StyleSheet.create({
@@ -66,8 +77,8 @@ function Project(props) {
 
 
           <Box sx={{p: '1rem'}}>
-            <Button className="join-button" variant="contained" color='success' onClick={handleJoin} projName={name} sx={{}}>
-              Join
+            <Button className="join-button" variant="contained" color='success' onClick={handleLeave} projName={name} sx={{}}>
+              Leave Project
             </Button>
           </Box>
         </Stack>

@@ -264,6 +264,27 @@ def projects():
                     'status' : 'ProjectID not found!',
                     'code' : 'false'
                 })
+            
+        elif typeReq == "leaveProj":
+            projectID = request.args.get("ID")
+            if db['Projects'].find_one({'id': projectID}):
+                if username in db['Projects'].find_one({'id': projectID})['users']:
+                    db['Projects'].update_one({'id': projectID},{'$pull':{'users': username}})
+                    db['UserMetadata'].update_one({'username' : user}, {'$pull':{'projects': projectID}})
+                    return jsonify({
+                        'status' : 'Successfully removed you to the project!',
+                        'code' : 'true'
+                    })
+                else: 
+                    return jsonify({
+                        'status' : 'User not already in Project!',
+                        'code' : 'false'
+                    })
+            else:
+                return jsonify({
+                    'status' : 'ProjectID not found!',
+                    'code' : 'false'
+                })
 
 
 

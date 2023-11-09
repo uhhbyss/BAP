@@ -125,7 +125,7 @@ function Projects() {
           {
             projects?.map(project => (
               // Use the Project component to render each project
-              <Project name={project.name} users={project.users} hwsets={project.hwsets} description={project.description}/>
+              <Project name={project.name} users={project.users} hwsets={project.hwsets} description={project.description} id={project.id}/>
             ))}
           </List>
         </Paper>

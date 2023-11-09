@@ -19,3 +19,7 @@ export function sendCheckOut(input, hardwareSetName, user, projName){
 export function joinRequest(user, projId){
     return axios.post(PROJECTS_API_URL, null, {params: {typeReq: "joinProj", username: user, ID: projId}})
 }
+
+export function leaveRequest(user, projId){
+    return axios.post(PROJECTS_API_URL, null, {params: {typeReq: "leaveProj", username: user, ID: projId}})
+}
