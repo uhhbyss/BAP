@@ -12,6 +12,18 @@ uri = config["MONGO_URI"]
 client = MongoClient(uri)
 db = client["BAP-MAIN"]
 
+
+'''
+metadata structure:
+
+projects = list of project names
+
+'''
+def getUserMetadata(user):
+    return db['UserMetadata'].find_one({'username': user})
+
+
+
 @app.route('/')
 @app.route('/login/', methods=['GET'])
 def login():
