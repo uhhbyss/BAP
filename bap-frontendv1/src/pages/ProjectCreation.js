@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate} from "react-router-dom";
 import { TextField, Button, Box, Typography, Stack} from "@mui/material";
-import attemptProjectCreation from '../services/ProjectCreationService'
+import tryCreation from '../services/CreationService'
 import { useContext } from "react";
 import { UserContext } from "../contexts/userContext";
 import { useEffect } from "react";
 
 function ProjectCreation() {
-    const { user, updateState } = useContext(UserContext)
+  const navigate = useNavigate();
+  const { user, updateState } = useContext(UserContext)
     // console.log(user)
 
     useEffect(() => {
@@ -15,6 +16,10 @@ function ProjectCreation() {
       if (loggedInUser) {
         const foundUser = JSON.parse(loggedInUser);
         updateState(foundUser);
+        console.log(foundUser)
+      }
+      else{
+        navigate('/')
       }
     }, []);
 
@@ -22,27 +27,19 @@ function ProjectCreation() {
     const [currProjectCreate, setCurrProjectCreate] = useState({
       'project_name': '',
       'id': '',
-      'description': ''
+      'description': '',
+      'user': user
     })
     const [ProjectCreateState, setProjectCreateState] = useState()
   
-    const navigate = useNavigate();
   
     const handleSubmit = (e) => {
       e.preventDefault();
 
-        attemptProjectCreation(currProjectCreate.project_name, currProjectCreate.id, currProjectCreate.description, user.username)
+        tryCreation(currProjectCreate.project_name, currProjectCreate.id, currProjectCreate.description, JSON.parse(localStorage.getItem('user')).username)
         .then((response) => {
             console.log(response.data)
             if(response.data['code'] === 'true'){
-              const updatedUser = {}
-              Object.assign(updatedUser, user)
-              console.log(updatedUser)
-              console.log(response.data["returnProject"])
-              updatedUser.projects.push(response.data["returnProject"])
-
-              updateState(updatedUser)
-              localStorage.setItem('user', JSON.stringify({user: updatedUser}))
               alert(response.data['status'])
               // setProjectCreateState(true);
               navigate('/projects')

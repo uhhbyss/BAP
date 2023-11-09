@@ -11,16 +11,30 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../contexts/userContext';
+import { useNavigate } from 'react-router-dom';
 
 
 // Define a Projects component that displays a list of projects
 function Projects() {
   const { user, updateState } = useContext(UserContext)
+  const navigate = useNavigate();
+  const [projects, setProjects] = useState([])
+
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
     if (loggedInUser) {
       const foundUser = JSON.parse(loggedInUser);
-      updateState(foundUser);
+      // updateState(foundUser);
+      // console.log(foundUser)
+
+      attemptProjects(foundUser).then((response) => {
+        if(response.data['code'] === 'true'){
+          setProjects(response.data['projects'])
+        }
+      })
+    } 
+    else{
+      navigate('/')
     }
   }, []);
 
@@ -29,8 +43,9 @@ function Projects() {
   //if username exists in the user object, then set it to that string, else return Error 
   //messy, will fix after we verify that the api works consistently
   console.log(user)
-  const user_name = user?.username ?? 'Error'
-  const user_projects = user?.projects ?? []
+  const user_name = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).username:'Error'
+  // const user_projects = user?.projects ?? []
+
 
 
 
@@ -65,7 +80,7 @@ function Projects() {
       <Paper style = {{maxHeight: '60vh', overflow: 'auto'}}>
         <List>
         {
-          user_projects?.map(project => (
+          projects?.map(project => (
             // Use the Project component to render each project
             <Project name={project.name} users={project.users} hwsets={project.hwsets} description={project.description}/>
           ))}

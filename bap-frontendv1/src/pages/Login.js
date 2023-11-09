@@ -21,9 +21,8 @@ function Login() {
     .then((response) => {
         if(response.data['code'] === 'true'){
             // setLoginState(true);
-            updateState({ user: {username: currLogin.email, projects: response.data['projects']}})
-            const ans = JSON.stringify({ user: {username: currLogin.email, projects: response.data['projects']}})
-            localStorage.setItem('user', ans)
+            updateState({ user: {username: currLogin.email}})
+            localStorage.setItem('user', JSON.stringify({ username: currLogin.email}))
             navigate('/projects')
         }
         else{

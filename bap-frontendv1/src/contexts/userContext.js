@@ -24,10 +24,7 @@ projects = {
 */
 
 const defaultState = {
-    user: {
-        username: '',
-        projects: []
-    },
+    username: '',
     updateState: (newState) => {}
 }
 
