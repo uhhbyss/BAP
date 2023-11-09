@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate} from "react-router-dom";
 import { TextField, Button, Box, Typography, Stack} from "@mui/material";
 import attemptLogin from './../services/LoginService'
+import { UserContext } from "../contexts/userContext";
+import { useContext } from "react";
 
 function Login() {
   const [currLogin, setCurrLogin] = useState({
@@ -9,7 +11,7 @@ function Login() {
     'password': ''
   })
   const [loginState, setLoginState] = useState(false)
-
+  const { user, updateState } = useContext(UserContext)
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -18,6 +20,7 @@ function Login() {
     .then((response) => {
         if(response.data['code'] === 'true'){
             setLoginState(true);
+            updateState({ user: {username: currLogin.email, projects: response.data['projects']}})
             navigate('/projects')
         }
         else{

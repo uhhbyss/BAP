@@ -11,12 +11,16 @@ import {Text, StyleSheet} from 'react-native';
 // Define a Project component that displays a project's details
 function Project(props) {
     // Use props to access the project's name, users, and hwsets
-    const {name, users, hwsets} = props;
-  
+    const { name, users, hwsets, description } = props;
+
+    // const { user, updateState } = useContext(UserContext)
+
+
+    // NEED TO UPDATE THIS WITH THE HOMEWORK ANSWERS!!!!
     // Define a function to handle joining a project
     function handleJoin() {
       // TODO: Implement the logic to join a project
-      alert(`You joined ${name}`);
+      alert(`You joined ERROR`);
     }
 
     const styles = StyleSheet.create({
@@ -55,7 +59,7 @@ function Project(props) {
           <Box sx={{p: '1rem'}}>
             <div className="project-hwsets">
               {hwsets.map(hwset => (
-                <HomeworkSet name={hwset.name} quantity={hwset.quantity} />
+                <HomeworkSet name={hwset.name} capacity={hwset.capacity} availability={hwset.availability} checkedOut={hwset.checkedOut}/>
               ))}
             </div>
           </Box>

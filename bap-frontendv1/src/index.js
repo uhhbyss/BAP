@@ -5,10 +5,12 @@ import reportWebVitals from './reportWebVitals';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Projects from './pages/Projects';
+import ProjectCreation from './pages/ProjectCreation';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { UserContextProvider } from './contexts/userContextProvider';
 
 // Define some sample data for testing
 const sampleProjects = [
@@ -62,13 +64,19 @@ const router = createBrowserRouter([
   element: <Projects projects = {sampleProjects}/>
 
 },
+{
+  path: "/projectcreation",
+  element: <ProjectCreation />
+}
 
 ]);
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <UserContextProvider>
+      <RouterProvider router={router} />
+    </UserContextProvider>
   </React.StrictMode>
 );
 
