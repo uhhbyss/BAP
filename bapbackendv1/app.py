@@ -103,7 +103,7 @@ def createUserMetadata(user):
 @cross_origin()
 def serve():
     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', request.path)
-    send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(app.static_folder, 'index.html')
 
 
 
