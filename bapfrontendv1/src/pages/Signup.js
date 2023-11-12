@@ -13,6 +13,9 @@ function Signup() {
   const [signUpState, setSignUpState] = useState()
 
   const navigate = useNavigate();
+  function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+}
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
@@ -37,6 +40,7 @@ function Signup() {
           if(response.data['code'] === 'true'){
             setSignUpState(true);
             localStorage.setItem('user', JSON.stringify({ username: currSignup.email}))
+            timeout(1000)
             navigate('/projects')
           }
           else if(response.data['code'] === 'false2'){
