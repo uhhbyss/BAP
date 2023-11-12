@@ -113,6 +113,12 @@ def login():
 
     user = request.args.get('user')
     password = request.args.get('pw')
+    currUser = request.args.get('currentUser')
+
+    if(currUser==''):
+        return jsonify({
+            'status':'alrLoggedIn'
+        })
 
 
     if(user and password):

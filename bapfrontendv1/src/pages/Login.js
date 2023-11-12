@@ -27,7 +27,7 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  const user_name = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).username:undefined
+  const user_name = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).username:''
     attemptLogin(currLogin.email, currLogin.password, user_name)
     .then((response) => {
         if(response.data['status'] == 'alrLoggedIn'){
