@@ -20,7 +20,6 @@ import { joinRequest } from '../services/ProjectsService';
 // Define a Projects component that displays a list of projects
 function Projects() {
   const { user, updateState } = useContext(UserContext)
-  const username = JSON.parse(localStorage.getItem('user')).username
   const navigate = useNavigate();
   const [projects, setProjects] = useState([])
   const [currProjectIDInput, setCurrProjectIDInput] = useState('')
@@ -60,6 +59,8 @@ function Projects() {
   //     navigate('/')
   //   }
   // }, [joinRequest]);
+
+  const username = JSON.parse(localStorage.getItem('user')).username
 
 
   function handleJoin(){
