@@ -27,9 +27,13 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    attemptLogin(currLogin.email, currLogin.password)
+  const user_name = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).username:undefined
+    attemptLogin(currLogin.email, currLogin.password, user_name)
     .then((response) => {
-        if(response.data['code'] === 'true'){
+        if(response.data['status'] == 'alrLoggedIn'){
+          navigate('/projects')
+        }
+        else if(response.data['code'] === 'true'){
             // setLoginState(true);
             updateState({ user: {username: currLogin.email}})
             localStorage.setItem('user', JSON.stringify({ username: currLogin.email}))
