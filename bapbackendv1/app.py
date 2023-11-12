@@ -323,7 +323,8 @@ def projectcreation():
     currUser = request.args.get('currUser')
     accessUser = encrypt(currUser, 8, 1)
 
-    if name and id and description:
+
+    if name and id and description and currUser:
         if request.method == "POST":
 
             alreadyExists = True if db['Projects'].find_one({'username': name}) or db['Projects'].find_one({'id':id}) else False
