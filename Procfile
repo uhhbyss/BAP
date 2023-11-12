@@ -1,2 +1,1 @@
-web: cd bapfrontendv1 && npm run start
-web: gunicorn main:app 
+web: sh -c 'cd ./bapfrontendv1/ && npm run start' && gunicorn main:app
