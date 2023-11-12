@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const LOGIN_API_URL = 'http://127.0.0.1:5000/login'
+const LOGIN_API_URL = 'https://bap-665c083d5c24.herokuapp.com/login'
 
 function attemptLogin(attemptUser, attemptPass){
     return axios.get(LOGIN_API_URL, {params: {user: attemptUser, pw: attemptPass}})

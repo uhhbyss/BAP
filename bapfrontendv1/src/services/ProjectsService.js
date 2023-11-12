@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const PROJECTS_API_URL = 'http://127.0.0.1:5000/projects/'
+const PROJECTS_API_URL = 'https://bap-665c083d5c24.herokuapp.com/projects/'
 
 // OBSOLETE RIGHT NOW
 export default function attemptProjects(tryUsername){

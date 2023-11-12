@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const SIGNUP_API_URL = 'http://127.0.0.1:5000/signup/'
+const SIGNUP_API_URL = 'https://bap-665c083d5c24.herokuapp.com/signup/'
 
 function attemptSignup(attemptUser, attemptPass){
     console.log(attemptUser + " " + attemptPass)
