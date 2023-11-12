@@ -119,37 +119,38 @@ def login():
         return jsonify({
             'status':'alrLoggedIn'
         })
-
-
-    if(user and password):
-
-        user = encrypt(user, 8, 1)
-        password = encrypt(password, 20, -1)
-
-        if request.method == 'GET':
-            foundUser = db['UserAuth'].find_one({'username':user})
-            if foundUser and foundUser['password'] == password:
-                print('success')
-
-                userMetaData = getUserMetadata(user)
-                foundProjects = findProjects(userMetaData['projects'])
-
-                return jsonify({
-                    "status": 'Successfully Logged in (valid user and pass)',
-                    'code':'true',
-                    'projects': foundProjects
-                })
-            else:
-                print('failure')
-                return jsonify({
-                    "status":"Failed to login (username not found or pass incorrect)",
-                    'code':'false'
-                })
     else:
-        return jsonify({
-            'status': 'Didnt fill in either user or pass',
-            'code':'false'
-        })
+        if(user and password):
+
+            user = encrypt(user, 8, 1)
+            password = encrypt(password, 20, -1)
+
+            if request.method == 'GET':
+                foundUser = db['UserAuth'].find_one({'username':user})
+                if foundUser and foundUser['password'] == password:
+                    print('success')
+
+                    userMetaData = getUserMetadata(user)
+                    foundProjects = findProjects(userMetaData['projects'])
+
+                    return jsonify({
+                        "status": 'Successfully Logged in (valid user and pass)',
+                        'code':'true',
+                        'projects': foundProjects
+                    })
+                else:
+                    print('failure')
+                    return jsonify({
+                        "status":"Failed to login (username not found or pass incorrect)",
+                        'code':'false'
+                    })
+        else:
+            return jsonify({
+                'status': 'Didnt fill in either user or pass',
+                'code':'false'
+            })
+
+    
         
 
 @app.route('/signup/', methods=['POST'])
