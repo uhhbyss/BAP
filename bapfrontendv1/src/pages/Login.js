@@ -14,6 +14,16 @@ function Login() {
   const { user, updateState } = useContext(UserContext)
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser)
+      navigate('/projects')
+    } 
+  }, []);
+
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

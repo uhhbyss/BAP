@@ -28,9 +28,6 @@ function HardwareSet( { name, capacity, availability, checkedOut, projName, proj
             if(response.data['code'] === 'true'){
                 availability = response.data['availability']
             }
-            else{
-                alert('error getting availability!!')
-            }
         })
       }, [currentQuantity]);
     

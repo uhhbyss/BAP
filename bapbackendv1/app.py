@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify 
+from flask import Flask, render_template, request, jsonify, send_from_directory 
 from pymongo import MongoClient
 from bson import ObjectId
 from flask_cors import CORS, cross_origin
@@ -100,6 +100,13 @@ def createUserMetadata(user):
 
 
 @app.route('/')
+@cross_origin()
+def serve():
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', request.path)
+    send_from_directory(app.static_folder, 'index.html')
+
+
+
 @app.route('/login/', methods=['GET'])
 @cross_origin()
 def login():
@@ -298,6 +305,10 @@ def projects():
                         'status' : 'ProjectID not found!',
                         'code' : 'false'
                     })
+    else:
+        return jsonify({
+            'status':'no valid username'
+        })
     
 
 

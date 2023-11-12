@@ -43,23 +43,23 @@ function Projects() {
     }
   }, []);
 
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      // updateState(foundUser);
-      // console.log(foundUser)
+  // useEffect(() => {
+  //   const loggedInUser = localStorage.getItem('user');
+  //   if (loggedInUser) {
+  //     const foundUser = JSON.parse(loggedInUser);
+  //     // updateState(foundUser);
+  //     // console.log(foundUser)
 
-      attemptProjects(foundUser).then((response) => {
-        if(response.data['code'] === 'true'){
-          setProjects(response.data['projects'])
-        }
-      })
-    } 
-    else{
-      navigate('/')
-    }
-  }, [joinRequest]);
+  //     attemptProjects(foundUser).then((response) => {
+  //       if(response.data['code'] === 'true'){
+  //         setProjects(response.data['projects'])
+  //       }
+  //     })
+  //   } 
+  //   else{
+  //     navigate('/')
+  //   }
+  // }, [joinRequest]);
 
 
   function handleJoin(){
