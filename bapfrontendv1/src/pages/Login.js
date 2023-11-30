@@ -41,7 +41,7 @@ function Login() {
         }
         else{
             // setLoginState(false)
-            alert('error')
+            alert('Could not login')
         }
     })
   }
