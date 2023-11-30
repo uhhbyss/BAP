@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Projects from './pages/Projects';
 import ProjectCreation from './pages/ProjectCreation';
+import StartUpRedirect from './pages/StartUpRedirect'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -47,7 +48,7 @@ const sampleProjects = [
 const router = createBrowserRouter([
 {
   path: '/',
-  element: <Login />,
+  element: <StartUpRedirect />,
 },
 {
   path: '/login',
