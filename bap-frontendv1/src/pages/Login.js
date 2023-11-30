@@ -14,12 +14,26 @@ function Login() {
   const { user, updateState } = useContext(UserContext)
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser)
+      navigate('/projects')
+    } 
+  }, []);
+
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    attemptLogin(currLogin.email, currLogin.password)
+  const user_name = localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')).username:''
+    attemptLogin(currLogin.email, currLogin.password, user_name)
     .then((response) => {
-        if(response.data['code'] === 'true'){
+        if(response.data['status'] == 'alrLoggedIn'){
+          navigate('/projects')
+        }
+        else if(response.data['code'] === 'true'){
             // setLoginState(true);
             updateState({ user: {username: currLogin.email}})
             localStorage.setItem('user', JSON.stringify({ username: currLogin.email}))
@@ -27,6 +41,7 @@ function Login() {
         }
         else{
             // setLoginState(false)
+            alert('Could not login')
         }
     })
   }
@@ -37,7 +52,7 @@ function Login() {
         <Box className="login">
             <Box className="login__logo" >
                 <Link to="/">
-                <img src="images/logo.png" alt="BAP logo" />
+                {/* <img src="images/logo.png" alt="BAP logo" /> */}
                 </Link>
             </Box>
             <Box className="login__form">
