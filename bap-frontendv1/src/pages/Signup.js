@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate} from "react-router-dom";
 import { TextField, Button, Box, Typography, Stack} from "@mui/material";
 import attemptSignup from "../services/SignupService";
+import { useEffect } from "react";
 
 function Signup() {
   const [currSignup, setCurrSignUp] = useState({
@@ -12,6 +13,19 @@ function Signup() {
   const [signUpState, setSignUpState] = useState()
 
   const navigate = useNavigate();
+  function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+}
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser)
+      navigate('/projects')
+    } 
+  }, []);
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,6 +40,7 @@ function Signup() {
           if(response.data['code'] === 'true'){
             setSignUpState(true);
             localStorage.setItem('user', JSON.stringify({ username: currSignup.email}))
+            timeout(1000)
             navigate('/projects')
           }
           else if(response.data['code'] === 'false2'){
@@ -46,7 +61,7 @@ function Signup() {
           <Stack direction={'column'}>
             <Box className="signup__logo">
               <Link to="/">
-                <img src="images/logo.png" alt="BAP logo" />
+                {/* <img src="images/logo.png" alt="BAP logo" /> */}
               </Link>
             </Box>
 
