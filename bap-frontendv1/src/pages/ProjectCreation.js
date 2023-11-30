@@ -63,7 +63,7 @@ function ProjectCreation() {
             <Stack direction={'column'}>
               <Box className="create__logo">
                 <Link to="/">
-                  <img src="images/logo.png" alt="BAP logo" />
+                  {/* <img src="images/logo.png" alt="BAP logo" /> */}
                 </Link>
               </Box>
   
