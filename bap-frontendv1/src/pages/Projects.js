@@ -20,7 +20,6 @@ import { joinRequest } from '../services/ProjectsService';
 // Define a Projects component that displays a list of projects
 function Projects() {
   const { user, updateState } = useContext(UserContext)
-  const username = JSON.parse(localStorage.getItem('user')).username
   const navigate = useNavigate();
   const [projects, setProjects] = useState([])
   const [currProjectIDInput, setCurrProjectIDInput] = useState('')
@@ -43,23 +42,25 @@ function Projects() {
     }
   }, []);
 
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      // updateState(foundUser);
-      // console.log(foundUser)
+  // useEffect(() => {
+  //   const loggedInUser = localStorage.getItem('user');
+  //   if (loggedInUser) {
+  //     const foundUser = JSON.parse(loggedInUser);
+  //     // updateState(foundUser);
+  //     // console.log(foundUser)
 
-      attemptProjects(foundUser).then((response) => {
-        if(response.data['code'] === 'true'){
-          setProjects(response.data['projects'])
-        }
-      })
-    } 
-    else{
-      navigate('/')
-    }
-  }, [joinRequest]);
+  //     attemptProjects(foundUser).then((response) => {
+  //       if(response.data['code'] === 'true'){
+  //         setProjects(response.data['projects'])
+  //       }
+  //     })
+  //   } 
+  //   else{
+  //     navigate('/')
+  //   }
+  // }, [joinRequest]);
+
+  const username = JSON.parse(localStorage.getItem('user')).username
 
 
   function handleJoin(){
